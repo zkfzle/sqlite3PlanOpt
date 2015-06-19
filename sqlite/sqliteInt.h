@@ -1953,15 +1953,28 @@ typedef int ynVar;
 ** to represent the greater-than-or-equal-to operator in the expression
 ** tree.
 **
+zkfzle begin
+Expr.op代表算子的种类
+如果是sql的文本?算子，token中包含其描述文本
+如果是变量，则token是变量名
+如果是sql函数，token中包含函数名
+zkfzle end
 ** If the expression is an SQL literal (TK_INTEGER, TK_FLOAT, TK_BLOB, 
 ** or TK_STRING), then Expr.token contains the text of the SQL literal. If
 ** the expression is a variable (TK_VARIABLE), then Expr.token contains the 
 ** variable name. Finally, if the expression is an SQL function (TK_FUNCTION),
 ** then Expr.token contains the name of the function.
 **
+zkfzle begin
+Expr.pRight和pLeft代表Expr的左右子"树"，即算子的左右表达式
+zkfzle end
 ** Expr.pRight and Expr.pLeft are the left and right subexpressions of a
 ** binary operator. Either or both may be NULL.
 **
+zkfzle begin
+Expr.x.pList表示sql函数的参数，如'in'
+Expr.x.pSelect表示子查询，当且仅当Expr.flags的EP_xIsSelect标志位为1才起作用
+zkfzle end
 ** Expr.x.pList is a list of arguments if the expression is an SQL function,
 ** a CASE expression or an IN expression of the form "<lhs> IN (<y>, <z>...)".
 ** Expr.x.pSelect is used if the expression is a sub-select or an expression of
@@ -2008,7 +2021,7 @@ typedef int ynVar;
 */
 struct Expr {
   u8 op;                 /* Operation performed by this node */
-  char affinity;         /* The affinity of the column or 0 if not a column */
+  char affinity;         /* The affinity of the column or 0 if not a column */  //所以sqlite只支持255个column么
   u32 flags;             /* Various flags.  EP_* See below */
   union {
     char *zToken;          /* Token value. Zero terminated and dequoted */
